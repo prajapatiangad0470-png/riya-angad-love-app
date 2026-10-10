@@ -108,7 +108,7 @@
     </div>
 
     <script>
-        // Music Player Logic
+        // Music Player Toggle
         const music = document.getElementById('bgMusic');
         const playBtn = document.getElementById('playBtn');
 
@@ -125,7 +125,7 @@
             }
         }
 
-        // Biometric Touch Logic
+        // Biometric Touch Vibration
         function triggerHandTouch() {
             if ("vibrate" in navigator) { 
                 navigator.vibrate([100, 100, 200, 600, 100, 100, 200, 600]); 
@@ -133,14 +133,14 @@
             alert("Riya ka haath pakad liya! Angad ka dil zor se dhadak raha hai ❤️ (70 BPM)");
         }
 
-        // Enter Key Listener for Chat Input
+        // Enter Key Handler for Chat
         document.getElementById('userInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 sendGeminiMessage();
             }
         });
 
-        // Gemini AI Chat Logic (Using safe decoded Base64 key)
+        // Gemini AI Integration (Base64 Key)
         const encodedKey = "QUl6YVN5X0FRLkFiOFJONkxNRGJlTDY1TXdRMm9kaVM3ZjZPYmZDQjJ5elBheWFvREhwTzB3eHQxcmpn";
 
         async function sendGeminiMessage() {
@@ -187,15 +187,15 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Safe 44 Photos Gallery Loader
+        // Clean & Robust 44 Photos Gallery Loader (Supports all photos 1 to 44)
         const photoGrid = document.getElementById('photoGrid');
         for (let i = 1; i <= 44; i++) {
             const card = document.createElement('div');
             card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg";
             card.innerHTML = `
-                <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative">
+                <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative flex items-center justify-center">
                     <img src="images/Riya${i}.jpg" 
-                         onerror="this.src='images/Riya${i}.png'" 
+                         onerror="this.onerror=function(){this.src='Riya${i}.jpg'};this.src='images/Riya${i}.png';" 
                          alt="Riya Memory ${i}" 
                          class="w-full h-full object-cover hover:scale-110 transition duration-500">
                 </div>
