@@ -83,7 +83,7 @@
 
         </div>
 
-        <!-- Upload New Memory Section (User can upload photo/video) -->
+        <!-- Upload New Memory Section -->
         <div id="upload-section" class="card-bg rounded-3xl p-6 mb-10 text-left shadow-2xl border border-pink-500/40">
             <h2 class="text-xl font-bold text-pink-300 mb-2 flex items-center gap-2"><span>📤</span> Add New Memory / Photo / Video</h2>
             <p class="text-xs text-gray-300 mb-4">Riya ya Angad yahan apni nayi photo ya video upload kar sakte hain jo turant gallery me jud jayegi!</p>
@@ -94,10 +94,10 @@
             </div>
         </div>
 
-        <!-- Memories Gallery Section -->
+        <!-- Memories Gallery Section (1 to 22) -->
         <div id="gallery-section" class="mb-12">
-            <h2 class="text-2xl font-bold text-white mb-2">🖼️ Our Memories & Gallery</h2>
-            <p class="text-xs text-pink-300 mb-6">Precious moments shared by Riya & Angad ❤️</p>
+            <h2 class="text-2xl font-bold text-white mb-2">🖼️ Our 22 Special Memories</h2>
+            <p class="text-xs text-pink-300 mb-6">Riya1.jpg se Riya22.jpg tak precious memories ❤️</p>
             <div id="photoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
         </div>
     </div>
@@ -190,22 +190,21 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Dynamic Memories & Upload System (LocalStorage Sync for Riya & Angad)
+        // Dynamic Memories & Upload System (1 to 22 Photos + User Custom Uploads)
         const photoGrid = document.getElementById('photoGrid');
 
         function loadMemories() {
             photoGrid.innerHTML = "";
             
-            // Default 44 local images + any user uploaded custom memories
             let customMemories = JSON.parse(localStorage.getItem('riya_angad_memories') || '[]');
 
-            // Render custom uploaded memories first
-            customMemories.forEach((mem, index) => {
+            // Render user uploaded custom memories first
+            customMemories.forEach((mem) => {
                 const card = document.createElement('div');
                 card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg border border-pink-400/50";
                 
                 let mediaElement = `<img src="${mem.url}" alt="Custom Memory" class="w-full h-full object-cover hover:scale-110 transition duration-500">`;
-                if(mem.type.startsWith('video')) {
+                if(mem.type && mem.type.startsWith('video')) {
                     mediaElement = `<video src="${mem.url}" controls class="w-full h-full object-cover"></video>`;
                 }
 
@@ -213,13 +212,13 @@
                     <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative flex items-center justify-center">
                         ${mediaElement}
                     </div>
-                    <span class="text-[11px] font-bold text-pink-300">✨ New Memory ❤️</span>
+                    <span class="text-[11px] font-bold text-pink-300">✨ New Upload ❤️</span>
                 `;
                 photoGrid.appendChild(card);
             });
 
-            // Render default 44 images
-            for (let i = 1; i <= 44; i++) {
+            // Render default 1 to 22 images
+            for (let i = 1; i <= 22; i++) {
                 const card = document.createElement('div');
                 card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg";
                 card.innerHTML = `
@@ -257,12 +256,11 @@
                 localStorage.setItem('riya_angad_memories', JSON.stringify(customMemories));
                 fileInput.value = "";
                 loadMemories();
-                alert("Memory successfully upload ho gayi! Riya ab ise dekh sakti hai ✨❤️");
+                alert("Memory successfully upload ho gayi! ✨❤️");
             };
             reader.readAsDataURL(file);
         }
 
-        // Load gallery on page start
         loadMemories();
     </script>
 </body>
