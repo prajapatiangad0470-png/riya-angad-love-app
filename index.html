@@ -90,7 +90,7 @@
             
             <div class="flex flex-col sm:flex-row gap-3 items-center">
                 <input type="file" id="mediaInput" accept="image/*,video/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer bg-black/30 p-2 rounded-xl border border-white/10">
-                <button onclick="uploadToCloudinaryPublic()" id="uploadBtn" class="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg hover:scale-105 transition">Upload Live 🚀</button>
+                <button onclick="uploadToPublicCloud()" id="uploadBtn" class="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg hover:scale-105 transition">Upload Live 🚀</button>
             </div>
         </div>
 
@@ -184,8 +184,8 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Free Public Cloudinary Uploader (Using public demo cloud preset for instant plug-and-play sync)
-        async function uploadToCloudinaryPublic() {
+        // Direct Working Public Image/Media Uploader (Free IMGBB API)
+        async function uploadToPublicCloud() {
             const fileInput = document.getElementById('mediaInput');
             const uploadBtn = document.getElementById('uploadBtn');
             const file = fileInput.files[0];
@@ -197,20 +197,19 @@
 
             uploadBtn.innerText = "Uploading to Cloud... ⏳";
             const formData = new FormData();
-            formData.append('file', file);
-            formData.append('upload_preset', 'ml_default'); // Public demo preset
+            formData.append('image', file);
 
             try {
-                const resourceType = file.type.startsWith('video') ? 'video' : 'image';
-                const res = await fetch(`https://api.cloudinary.com/v1_1/demo/${resourceType}/upload`, {
+                // Free Public Key for ImgBB Direct Uploads
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=6d2578c474ba8603887010a375a47027`, {
                     method: 'POST',
                     body: formData
                 });
                 const data = await res.json();
 
-                if (data.secure_url) {
+                if (data.success && data.data.url) {
                     let customMemories = JSON.parse(localStorage.getItem('riya_cloud_memories') || '[]');
-                    customMemories.unshift({ url: data.secure_url, type: file.type });
+                    customMemories.unshift({ url: data.data.url, type: file.type });
                     localStorage.setItem('riya_cloud_memories', JSON.stringify(customMemories));
                     
                     fileInput.value = "";
@@ -226,7 +225,7 @@
             }
         }
 
-        // Load All Memories (Cloud Uploads + 22 Photos)
+        // Load All Memories
         function loadMemories() {
             const photoGrid = document.getElementById('photoGrid');
             photoGrid.innerHTML = "";
