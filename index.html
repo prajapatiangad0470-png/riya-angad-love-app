@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For My Love Riya ❤️ | Public Live Memories</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cloudinary Official Upload Widget Script -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <style>
         body { background-color: #0b0512; color: #ffffff; font-family: 'Segoe UI', Tahoma, sans-serif; }
         .glass-nav { background: rgba(33, 18, 54, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -22,7 +24,7 @@
             <a href="index.html" class="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full text-white shadow">🏠 Home</a>
             <a href="cafe.html" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">☕ Cafe Riyu</a>
             <a href="#gallery-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">🖼️ Memories</a>
-            <a href="#upload-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-pink-300">📤 Public Upload</a>
+            <a href="#upload-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-pink-300">📤 Cloud Upload</a>
             <a href="#aashika-ai" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">✨ Aashika AI</a>
         </nav>
     </div>
@@ -83,21 +85,20 @@
 
         </div>
 
-        <!-- Public Cloud Upload Section -->
-        <div id="upload-section" class="card-bg rounded-3xl p-6 mb-10 text-left shadow-2xl border border-pink-500/40">
-            <h2 class="text-xl font-bold text-pink-300 mb-2 flex items-center gap-2"><span>📤</span> Upload Public Memory (Riya & Angad Sync)</h2>
-            <p class="text-xs text-gray-300 mb-4">Yahan se jo bhi photo/video upload karoge, wo hamesha ke liye cloud par save ho jayegi aur dono ko live dikhegi!</p>
+        <!-- Direct Cloud Upload Section -->
+        <div id="upload-section" class="card-bg rounded-3xl p-6 mb-10 text-center shadow-2xl border border-pink-500/40">
+            <h2 class="text-xl font-bold text-pink-300 mb-2 flex items-center justify-center gap-2"><span>☁️</span> Public Cloud Memory Upload</h2>
+            <p class="text-xs text-gray-300 mb-5">Click below to upload photo or video directly to Cloudinary (`rmzejuyu`) ❤️</p>
             
-            <div class="flex flex-col sm:flex-row gap-3 items-center">
-                <input type="file" id="mediaInput" accept="image/*,video/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer bg-black/30 p-2 rounded-xl border border-white/10">
-                <button onclick="uploadToPublicCloud()" id="uploadBtn" class="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg hover:scale-105 transition">Upload Live 🚀</button>
-            </div>
+            <button id="upload_widget" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-2xl text-xs font-bold shadow-lg hover:scale-105 transition">
+                📤 Open Cloud Uploader 🚀
+            </button>
         </div>
 
-        <!-- Memories Gallery (Cloud + 22 Photos) -->
+        <!-- Memories Gallery -->
         <div id="gallery-section" class="mb-12">
             <h2 class="text-2xl font-bold text-white mb-2">🖼️ Shared Memories Gallery</h2>
-            <p class="text-xs text-pink-300 mb-6">Uploaded memories + 22 special photos ❤️</p>
+            <p class="text-xs text-pink-300 mb-6">Cloud uploads + 22 special photos ❤️</p>
             <div id="photoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
         </div>
     </div>
@@ -184,46 +185,43 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Direct Working Public Image/Media Uploader (Free IMGBB API)
-        async function uploadToPublicCloud() {
-            const fileInput = document.getElementById('mediaInput');
-            const uploadBtn = document.getElementById('uploadBtn');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert("Pehle koi photo ya video select karein! 😊");
-                return;
-            }
-
-            uploadBtn.innerText = "Uploading to Cloud... ⏳";
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                // Free Public Key for ImgBB Direct Uploads
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=6d2578c474ba8603887010a375a47027`, {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await res.json();
-
-                if (data.success && data.data.url) {
-                    let customMemories = JSON.parse(localStorage.getItem('riya_cloud_memories') || '[]');
-                    customMemories.unshift({ url: data.data.url, type: file.type });
-                    localStorage.setItem('riya_cloud_memories', JSON.stringify(customMemories));
-                    
-                    fileInput.value = "";
-                    loadMemories();
-                    alert("Memory successfully live upload ho gayi! ✨❤️");
-                } else {
-                    throw new Error("Upload failed");
+        // Cloudinary Official Widget Setup
+        var myWidget = cloudinary.createUploadWidget({
+            cloudName: 'rmzejuyu', 
+            uploadPreset: 'ml_default',
+            sources: ['local', 'camera', 'url'],
+            multiple: false,
+            styles: {
+                palette: {
+                    window: "#0B0512",
+                    windowBorder: "#EC4899",
+                    tabIcon: "#EC4899",
+                    menuIcons: "#FFFFFF",
+                    textDark: "#000000",
+                    textLight: "#FFFFFF",
+                    link: "#EC4899",
+                    action: "#EC4899",
+                    inactiveTabIcon: "#805AD5",
+                    error: "#F43F5E",
+                    inProgress: "#EC4899",
+                    complete: "#10B981",
+                    sourceBg: "#1A0E29"
                 }
-            } catch (err) {
-                alert("Upload error: " + err.message);
-            } finally {
-                uploadBtn.innerText = "Upload Live 🚀";
             }
-        }
+        }, (error, result) => { 
+            if (!error && result && result.event === "success") { 
+                let customMemories = JSON.parse(localStorage.getItem('riya_cloud_memories') || '[]');
+                customMemories.unshift({ url: result.info.secure_url, type: result.info.resource_type });
+                localStorage.setItem('riya_cloud_memories', JSON.stringify(customMemories));
+                
+                loadMemories();
+                alert("Memory successfully live upload ho gayi! ✨❤️");
+            }
+        });
+
+        document.getElementById("upload_widget").addEventListener("click", function(){
+            myWidget.open();
+        }, false);
 
         // Load All Memories
         function loadMemories() {
@@ -237,7 +235,7 @@
                 card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg border border-pink-400/50";
                 
                 let mediaHTML = `<img src="${mem.url}" class="w-full h-full object-cover hover:scale-110 transition duration-500">`;
-                if(mem.type && mem.type.startsWith('video')) {
+                if(mem.type === 'video' || (mem.url && mem.url.match(/\.(mp4|webm|mov)$/i))) {
                     mediaHTML = `<video src="${mem.url}" controls class="w-full h-full object-cover"></video>`;
                 }
 
