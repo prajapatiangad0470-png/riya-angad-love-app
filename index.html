@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Love Riya ❤️ | 44 Memories Gallery</title>
+    <title>For My Love Riya ❤️ | Live Memories & Gallery</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0b0512; color: #ffffff; font-family: 'Segoe UI', Tahoma, sans-serif; }
@@ -21,9 +21,9 @@
         <nav class="glass-nav rounded-full px-5 py-2.5 flex items-center gap-3 overflow-x-auto max-w-full text-xs font-semibold shadow-2xl">
             <a href="index.html" class="px-4 py-1.5 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full text-white shadow">🏠 Home</a>
             <a href="cafe.html" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">☕ Cafe Riyu</a>
-            <a href="#gallery-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">🖼️ 44 Memories</a>
+            <a href="#gallery-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">🖼️ Memories</a>
+            <a href="#upload-section" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-pink-300">➕ Upload</a>
             <a href="#aashika-ai" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">✨ Aashika AI</a>
-            <a href="#hold-hand" class="px-3 py-1.5 hover:bg-white/10 rounded-full text-gray-300">🤝 Hold Hand</a>
         </nav>
     </div>
 
@@ -83,10 +83,21 @@
 
         </div>
 
-        <!-- 44 Photos Gallery Section -->
+        <!-- Upload New Memory Section (User can upload photo/video) -->
+        <div id="upload-section" class="card-bg rounded-3xl p-6 mb-10 text-left shadow-2xl border border-pink-500/40">
+            <h2 class="text-xl font-bold text-pink-300 mb-2 flex items-center gap-2"><span>📤</span> Add New Memory / Photo / Video</h2>
+            <p class="text-xs text-gray-300 mb-4">Riya ya Angad yahan apni nayi photo ya video upload kar sakte hain jo turant gallery me jud jayegi!</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 items-center">
+                <input type="file" id="mediaInput" accept="image/*,video/*" class="w-full text-xs text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-pink-500 file:text-white hover:file:bg-pink-600 cursor-pointer bg-black/30 p-2 rounded-xl border border-white/10">
+                <button onclick="uploadNewMemory()" class="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow-lg hover:scale-105 transition">Upload Now ✨</button>
+            </div>
+        </div>
+
+        <!-- Memories Gallery Section -->
         <div id="gallery-section" class="mb-12">
-            <h2 class="text-2xl font-bold text-white mb-2">🖼️ Our 44 Special Memories</h2>
-            <p class="text-xs text-pink-300 mb-6">Riya1.jpg se Riya44.jpg tak saari precious memories ❤️</p>
+            <h2 class="text-2xl font-bold text-white mb-2">🖼️ Our Memories & Gallery</h2>
+            <p class="text-xs text-pink-300 mb-6">Precious moments shared by Riya & Angad ❤️</p>
             <div id="photoGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
         </div>
     </div>
@@ -114,11 +125,7 @@
 
         function toggleMusic() {
             if (music.paused) {
-                music.play().then(() => { 
-                    playBtn.innerText = "Pause ⏸️"; 
-                }).catch(e => { 
-                    alert("Audio play karne ke liye button click karein!"); 
-                });
+                music.play().then(() => { playBtn.innerText = "Pause ⏸️"; }).catch(e => { alert("Audio play karne ke liye button click karein!"); });
             } else {
                 music.pause();
                 playBtn.innerText = "Play 🎵";
@@ -127,20 +134,16 @@
 
         // Biometric Touch Vibration
         function triggerHandTouch() {
-            if ("vibrate" in navigator) { 
-                navigator.vibrate([100, 100, 200, 600, 100, 100, 200, 600]); 
-            }
+            if ("vibrate" in navigator) { navigator.vibrate([100, 100, 200, 600, 100, 100, 200, 600]); }
             alert("Riya ka haath pakad liya! Angad ka dil zor se dhadak raha hai ❤️ (70 BPM)");
         }
 
         // Enter Key Handler for Chat
         document.getElementById('userInput').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                sendGeminiMessage();
-            }
+            if (event.key === 'Enter') { sendGeminiMessage(); }
         });
 
-        // Gemini AI Integration (Base64 Key)
+        // Gemini AI Integration
         const encodedKey = "QUl6YVN5X0FRLkFiOFJONkxNRGJlTDY1TXdRMm9kaVM3ZjZPYmZDQjJ5elBheWFvREhwTzB3eHQxcmpn";
 
         async function sendGeminiMessage() {
@@ -187,22 +190,80 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // Clean & Robust 44 Photos Gallery Loader (Supports all photos 1 to 44)
+        // Dynamic Memories & Upload System (LocalStorage Sync for Riya & Angad)
         const photoGrid = document.getElementById('photoGrid');
-        for (let i = 1; i <= 44; i++) {
-            const card = document.createElement('div');
-            card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg";
-            card.innerHTML = `
-                <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative flex items-center justify-center">
-                    <img src="images/Riya${i}.jpg" 
-                         onerror="this.onerror=function(){this.src='Riya${i}.jpg'};this.src='images/Riya${i}.png';" 
-                         alt="Riya Memory ${i}" 
-                         class="w-full h-full object-cover hover:scale-110 transition duration-500">
-                </div>
-                <span class="text-[11px] font-bold text-pink-300">Memory #${i} ❤️</span>
-            `;
-            photoGrid.appendChild(card);
+
+        function loadMemories() {
+            photoGrid.innerHTML = "";
+            
+            // Default 44 local images + any user uploaded custom memories
+            let customMemories = JSON.parse(localStorage.getItem('riya_angad_memories') || '[]');
+
+            // Render custom uploaded memories first
+            customMemories.forEach((mem, index) => {
+                const card = document.createElement('div');
+                card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg border border-pink-400/50";
+                
+                let mediaElement = `<img src="${mem.url}" alt="Custom Memory" class="w-full h-full object-cover hover:scale-110 transition duration-500">`;
+                if(mem.type.startsWith('video')) {
+                    mediaElement = `<video src="${mem.url}" controls class="w-full h-full object-cover"></video>`;
+                }
+
+                card.innerHTML = `
+                    <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative flex items-center justify-center">
+                        ${mediaElement}
+                    </div>
+                    <span class="text-[11px] font-bold text-pink-300">✨ New Memory ❤️</span>
+                `;
+                photoGrid.appendChild(card);
+            });
+
+            // Render default 44 images
+            for (let i = 1; i <= 44; i++) {
+                const card = document.createElement('div');
+                card.className = "card-bg rounded-2xl overflow-hidden p-2 flex flex-col items-center shadow-lg";
+                card.innerHTML = `
+                    <div class="w-full h-40 bg-black/40 rounded-xl overflow-hidden mb-2 relative flex items-center justify-center">
+                        <img src="images/Riya${i}.jpg" 
+                             onerror="this.onerror=function(){this.src='Riya${i}.jpg'};this.src='images/Riya${i}.png';" 
+                             alt="Riya Memory ${i}" 
+                             class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    </div>
+                    <span class="text-[11px] font-bold text-pink-300">Memory #${i} ❤️</span>
+                `;
+                photoGrid.appendChild(card);
+            }
         }
+
+        function uploadNewMemory() {
+            const fileInput = document.getElementById('mediaInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Pehle koi photo ya video select karein! 😊");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result;
+                let customMemories = JSON.parse(localStorage.getItem('riya_angad_memories') || '[]');
+                
+                customMemories.unshift({
+                    url: base64Data,
+                    type: file.type,
+                    date: new Date().toISOString()
+                });
+
+                localStorage.setItem('riya_angad_memories', JSON.stringify(customMemories));
+                fileInput.value = "";
+                loadMemories();
+                alert("Memory successfully upload ho gayi! Riya ab ise dekh sakti hai ✨❤️");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Load gallery on page start
+        loadMemories();
     </script>
 </body>
 </html>
