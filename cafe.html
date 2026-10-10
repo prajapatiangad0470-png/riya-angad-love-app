@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☕ Cafe Riyu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0b0512; color: #ffffff; font-family: 'Segoe UI', Roboto, sans-serif; }
+        .glass-card { background: rgba(33, 18, 54, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glow-title { text-shadow: 0 0 15px rgba(236, 72, 153, 0.6); }
+    </style>
+</head>
+<body class="min-h-screen pb-24 pt-20 px-4 flex justify-center items-center relative overflow-x-hidden">
+
+    <canvas id="rainCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-30"></canvas>
+
+    <div class="max-w-2xl w-full z-10">
+        <div class="text-center mb-6">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-pink-400 glow-title mb-2">☕ Cafe Riyu</h1>
+            <div class="text-gray-300 italic text-sm sm:text-base">"Ab cafe kholne ki chul kyu machi hai? — Riya 👏"</div>
+        </div>
+
+        <div class="text-center mb-6">
+            <span class="inline-block glass-card px-5 py-2 rounded-full text-xs sm:text-sm text-purple-300 font-semibold border border-purple-500/30">
+                ✨ Table #0411: Permanently Reserved for Riya 💜
+            </span>
+        </div>
+
+        <div class="text-center mb-6">
+            <span class="text-xs sm:text-sm text-gray-400">🌧️ Ambience: Soft Rain & Lofi</span>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4 text-center mb-8 border border-pink-500/20">
+            <div class="text-3xl mb-1">☕</div>
+            <div class="text-sm font-bold text-pink-300">Preparing your order...</div>
+            <div class="text-xs text-gray-400 mt-1">Barista Angad is making it special for you!</div>
+        </div>
+
+        <div class="mb-4">
+            <span class="text-lg font-bold text-rose-300">📜 Special Menu for Riyu:</span>
+        </div>
+
+        <div class="space-y-4 mb-8">
+            <div class="glass-card rounded-2xl p-4 flex justify-between items-center">
+                <div class="flex items-start gap-3">
+                    <div class="text-3xl p-2 bg-white/5 rounded-xl">☕</div>
+                    <div>
+                        <div class="font-bold text-pink-300 text-base">Baunii's Hot Chocolate</div>
+                        <div class="text-xs text-gray-300 mt-1">Extra sweet, extra chocolate, topped with whipped cream and tiny marshmallows.</div>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold text-yellow-400 bg-yellow-400/10 px-2 py-1 rounded-md border border-yellow-400/20">Free</span>
+            </div>
+
+            <div class="glass-card rounded-2xl p-4 flex justify-between items-center">
+                <div class="flex items-start gap-3">
+                    <div class="text-3xl p-2 bg-white/5 rounded-xl">🍵</div>
+                    <div>
+                        <div class="font-bold text-pink-300 text-base">Doctor Riya's Garm Paani</div>
+                        <div class="text-xs text-gray-300 mt-1">"Koi na garm paani peelo 🤩" — Pure boiled warm water with herbal mint.</div>
+                    </div>
+                </div>
+                <span class="text-xs font-semibold text-green-400 bg-green-400/10 px-2 py-1 rounded-md border border-green-400/20">Doctor's Choice</span>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="index.html" class="inline-block text-sm text-gray-400 hover:text-pink-300 transition underline decoration-dashed">← Back Home</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const drops = [];
+        for (let i = 0; i < 60; i++) {
+            drops.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, length: Math.random() * 20 + 10, speed: Math.random() * 5 + 3 });
+        }
+        function drawRain() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(255, 182, 193, 0.4)';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < drops.length; i++) {
+                const d = drops[i];
+                ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x, d.y + d.length); ctx.stroke();
+                d.y += d.speed;
+                if (d.y > canvas.height) { d.y = -d.length; d.x = Math.random() * canvas.width; }
+            }
+            requestAnimationFrame(drawRain);
+        }
+        drawRain();
+    </script>
+</body>
+</html>
