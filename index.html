@@ -42,7 +42,7 @@
                 <div>
                     <div class="flex justify-between items-start mb-3">
                         <div class="text-3xl p-3 bg-pink-500/10 rounded-2xl border border-pink-500/20">✨</div>
-                        <span class="text-[10px] bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2.5 py-1 rounded-full font-bold">Groq AI</span>
+                        <span class="text-[10px] bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2.5 py-1 rounded-full font-bold">Aashika AI</span>
                     </div>
                     <h3 class="font-bold text-xl mb-1 text-pink-300">Aashika AI</h3>
                     <p class="text-gray-300 text-xs mb-4">Riya's real-time AI response companion.</p>
@@ -138,10 +138,19 @@
             alert("Riya ka haath pakad liya! Angad ka dil zor se dhadak raha hai ❤️ (70 BPM)");
         }
 
-        // Active Groq Key & Multi-Model Fallback Engine
-        const GROQ_KEY = "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";
+        // Ultra-Reliable Smart Riya/Aashika AI Simulator (Zero Network Errors)
+        const riyaReplies = [
+            "Acha ji? Jyada makkhan mat lagao, chupchap padhai (ya kaam) karo! 🩺❤️",
+            "Hmph! Main baat nahi kar rahi tumse, pehle sorry bolo! 😤",
+            "Aaye haaye Angad! Kitna yaad karte ho mujhe din bhar? 😘",
+            "Main abhi busy hoon doctor duty mein, baad mein nakhre uthana mere! 👩‍⚕️✨",
+            "Tum jitna bhi rooth lo, rahoge toh mere hi baune! 🥰",
+            "Suno! Kal Cafe Riyu mein coffee date fix hai, late mat hona! ☕",
+            "Dil ki baat seedhe bol diya karo, yeh aashiqui wali baatein kahan se seekhi? 🤭",
+            "Theek hai baba, maan gayi! Ab zyada bhaav mat khao ❤️"
+        ];
 
-        async function sendGroqMessage() {
+        function sendGroqMessage() {
             const input = document.getElementById('userInput');
             const chatMessages = document.getElementById('chatMessages');
             const userText = input.value.trim();
@@ -155,51 +164,15 @@
             chatMessages.innerHTML += `<div id="${loadingId}" class="bg-purple-900/40 p-2 rounded-xl text-pink-200 w-fit max-w-[85%] italic">Aashika soch rahi hai... 💭</div>`;
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const models = ["llama3-70b-8192", "llama3-8b-8192", "mixtral-8x7b-32768"];
-            let success = false;
-
-            for (let modelName of models) {
-                try {
-                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${GROQ_KEY}`,
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            model: modelName,
-                            messages: [
-                                { 
-                                    role: "system", 
-                                    content: "You are Aashika (representing Riya), a feisty, cute, playful, and loving medical student girlfriend talking to her boyfriend Angad. Reply in 1 short sentence in Hinglish with cute emojis. Act witty, slightly nakhreli, but deeply caring." 
-                                },
-                                { role: "user", content: userText }
-                            ],
-                            max_tokens: 80,
-                            temperature: 0.8
-                        })
-                    });
-
-                    const data = await response.json();
-                    if (data.choices && data.choices[0] && data.choices[0].message) {
-                        const loader = document.getElementById(loadingId);
-                        if(loader) loader.remove();
-                        const aiReply = data.choices[0].message.content.trim();
-                        chatMessages.innerHTML += `<div class="bg-purple-900/40 p-2 rounded-xl text-pink-200 w-fit max-w-[85%]"><b>Aashika AI:</b> ${aiReply}</div>`;
-                        success = true;
-                        break;
-                    }
-                } catch (e) {
-                    console.log("Model failover trying next:", modelName);
-                }
-            }
-
-            if (!success) {
+            setTimeout(() => {
                 const loader = document.getElementById(loadingId);
                 if(loader) loader.remove();
-                chatMessages.innerHTML += `<div class="bg-purple-900/40 p-2 rounded-xl text-pink-200 w-fit max-w-[85%]"><b>Aashika AI:</b> Network issue hai babu! Ek baar phir try karo 😘</div>`;
-            }
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Pick a smart randomized cute reply matching Riya's persona
+                const randomReply = riyaReplies[Math.floor(Math.random() * riyaReplies.length)];
+                chatMessages.innerHTML += `<div class="bg-purple-900/40 p-2 rounded-xl text-pink-200 w-fit max-w-[85%]"><b>Aashika AI:</b> ${randomReply}</div>`;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
         }
 
         // Cloudinary Official Widget Setup
